@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dustin Lin — Blog &amp; Playground</title>
+  <meta name="description" content="Project write-ups, engineering notes, and small interactive experiments by Dustin Lin." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;}
+    a{color:inherit;text-decoration:none;}
+
+    .nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+      padding:14px clamp(18px,4vw,40px);background:rgba(245,239,225,.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+    .nav .brand{font-family:var(--mono);font-weight:700;}.nav .brand b{color:var(--highlight);}
+    .nav .links{display:flex;align-items:center;gap:clamp(12px,2.4vw,24px);}
+    .nav .links a{font-family:var(--mono);font-size:.82rem;color:var(--graphite);}
+    .nav .links a:hover{color:var(--ink);}
+    .nav .links a.active{color:var(--ink);position:relative;}
+    .nav .links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--highlight);}
+    .nav .resume{border:1px solid var(--ink);border-radius:100px;padding:5px 13px;color:var(--ink)!important;}
+    .nav .resume:hover{background:var(--ink);color:var(--paper)!important;}
+    .nav .resume::after{display:none;}
+    .nav__menu{display:none;background:none;border:none;cursor:pointer;font-size:1.4rem;line-height:1;color:var(--ink);padding:2px 6px;font-family:var(--mono);}
+    @media(max-width:640px){
+      .nav__menu{display:inline-flex;}
+      .nav .links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;
+        background:var(--paper);border-bottom:1px solid var(--border);padding:6px 0 10px;box-shadow:0 14px 26px -16px rgba(43,57,91,.4);display:none;}
+      .nav.open .links{display:flex;}
+      .nav .links a{padding:11px clamp(18px,4vw,40px);}
+      .nav .links a.active::after{display:none;}
+      .nav .resume{margin:8px clamp(18px,4vw,40px) 2px;text-align:center;}
+    }
+
+    main{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,5vw,24px);}
+    section{padding:56px 0;}
+    .stitle{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite);
+      display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+    .stitle::before{content:"";width:26px;height:2px;background:var(--highlight);}
+    .prose{color:var(--graphite);max-width:62ch;font-size:1.02rem;}.prose b{color:var(--ink);}
+
+    /* page header */
+    .phead{padding:clamp(48px,9vh,84px) 0 34px;border-bottom:1px solid var(--border);}
+    .phead .eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:14px;}
+    .phead h1{font-family:var(--serif);font-size:clamp(2.4rem,7vw,4rem);font-weight:700;line-height:1;letter-spacing:-.025em;}
+    .phead h1 em{font-style:normal;position:relative;}
+    .phead h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:.3em;background:rgba(242,189,30,.5);z-index:-1;}
+    .phead .lead{margin-top:20px;color:var(--graphite);font-size:1.1rem;max-width:52ch;}
+
+    /* chips */
+    .chips{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;}
+    .chips li{font-family:var(--mono);font-size:.7rem;border:1px solid var(--ink);border-radius:2px;padding:3px 9px;color:var(--ink);}
+
+    /* post cards -> detail pages */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;}
+    @media(max-width:760px){.grid{grid-template-columns:1fr;}}
+    .pcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 24px;
+      box-shadow:2px 4px 0 rgba(43,57,91,.05);transition:transform .18s,box-shadow .2s;}
+    .pcard:hover{transform:translateY(-4px);box-shadow:5px 9px 0 rgba(43,57,91,.09);}
+    .pcard__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+    .pcard__cat{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);
+      background:rgba(242,189,30,.28);border:1px solid rgba(242,189,30,.5);border-radius:100px;padding:3px 10px;}
+    .pcard__date{font-family:var(--mono);font-size:.72rem;color:var(--sage);}
+    .pcard__title{font-family:var(--serif);font-size:1.35rem;font-weight:600;color:var(--ink);letter-spacing:-.01em;line-height:1.15;}
+    .pcard__excerpt{color:var(--graphite);font-size:.94rem;margin-top:9px;flex:1;}
+    .pcard__more{font-family:var(--mono);font-size:.76rem;color:var(--ink);margin-top:18px;}
+    .pcard:hover .pcard__more{color:var(--highlight);}
+
+    /* playground demo */
+    .demo{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 12px 40px -22px rgba(43,57,91,.35);margin-top:8px;}
+    .demo__bar{display:flex;align-items:center;gap:8px;padding:11px 16px;background:var(--paper2);border-bottom:1px solid var(--border);font-family:var(--mono);}
+    .demo__bar .dot{width:9px;height:9px;border-radius:50%;background:var(--sage);}
+    .demo__bar b{font-size:.78rem;}
+    .demo__bar span{margin-left:auto;font-size:.64rem;color:var(--graphite);}
+    .demo__grid{display:grid;grid-template-columns:1fr 1fr;}
+    @media(max-width:720px){.demo__grid{grid-template-columns:1fr;}}
+    #json{font-family:var(--mono);font-size:.82rem;line-height:1.65;color:var(--ink);background:var(--paper);border:none;
+      border-right:1px solid var(--border);padding:18px;resize:vertical;min-height:340px;outline:none;width:100%;}
+    @media(max-width:720px){#json{border-right:none;border-bottom:1px solid var(--border);min-height:220px;}}
+    .render{padding:18px;display:flex;flex-direction:column;gap:12px;background:var(--card);}
+    .w{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+    .w__label{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--graphite);margin-bottom:6px;}
+    .w__val{font-family:var(--serif);font-size:1.9rem;font-weight:600;color:var(--ink);letter-spacing:-.02em;line-height:1;}
+    .w--bar .bar{display:flex;align-items:center;gap:10px;margin-top:9px;font-family:var(--mono);font-size:.72rem;color:var(--graphite);}
+    .w--bar .bar__name{width:56px;flex-shrink:0;}
+    .w--bar .bar__track{flex:1;height:11px;background:var(--paper2);border-radius:100px;overflow:hidden;}
+    .w--bar .bar__fill{height:100%;background:var(--highlight);border-radius:100px;transition:width .3s;}
+    .w--bar .bar__v{width:40px;text-align:right;color:var(--ink);}
+    .w--note{color:var(--graphite);font-size:.9rem;}
+    .demo__err{font-family:var(--mono);font-size:.72rem;color:var(--danger);padding:9px 16px;min-height:34px;border-top:1px solid var(--border);background:var(--paper2);}
+    .demo__err:empty::before{content:"✓ valid — rendering live";color:var(--sage);}
+
+    .slot{margin-top:20px;border:1px dashed var(--border);border-radius:12px;background:var(--card);padding:26px;text-align:center;
+      color:var(--graphite);font-family:var(--mono);font-size:.82rem;}
+    .slot b{color:var(--ink);}
+
+    footer{text-align:center;padding:40px 20px 60px;color:var(--graphite);font-family:var(--mono);font-size:.8rem;border-top:1px solid var(--border);}
+    footer a{text-decoration:underline;text-decoration-color:var(--highlight);text-underline-offset:2px;}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important;}}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <a href="index.html" class="brand">dusty<b>_ai</b></a>
+    <button class="nav__menu" aria-label="Menu" aria-expanded="false">☰</button>
+    <nav class="links">
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="index.html#connect">Connect</a>
+      <a class="resume" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="phead">
+      <p class="eyebrow">// notes &amp; experiments</p>
+      <h1>Blog &amp; <em>Playground</em></h1>
+      <p class="lead">Project write-ups, engineering notes, and small interactive experiments I build for fun.</p>
+    </section>
+
+    <section id="writing">
+      <p class="stitle">01 / Writing</p>
+      <div class="grid">
+
+        <!-- ============================================================
+             To add a post: copy one <a class="pcard"> … </a> block,
+             point href at a new detail page (copy post-template.html),
+             and update the category / date / title / excerpt.
+        ============================================================= -->
+
+        <a class="pcard" href="blog-json-dashboards.html">
+          <div class="pcard__top"><span class="pcard__cat">Engineering</span><span class="pcard__date">2026 · 06</span></div>
+          <h3 class="pcard__title">Why our dashboards are JSON, not code</h3>
+          <p class="pcard__excerpt">How Beacon Reports turned dashboards into declarative documents you can author from a prompt — and validate before they ever hit the UI.</p>
+          <ul class="chips"><li>Beacon Reports</li><li>JSON</li><li>LLM</li></ul>
+          <span class="pcard__more">Read →</span>
+        </a>
+
+        <a class="pcard" href="blog-snowflake-ingestion.html">
+          <div class="pcard__top"><span class="pcard__cat">Data</span><span class="pcard__date">2026 · 05</span></div>
+          <h3 class="pcard__title">Cutting 1M-row ingestion from 30 min to 6 s</h3>
+          <p class="pcard__excerpt">The idempotent stage → temp → MERGE pattern behind the RDS → Snowflake migration, and why it made onboarding a one-line PR.</p>
+          <ul class="chips"><li>Snowflake</li><li>ETL</li><li>Python</li></ul>
+          <span class="pcard__more">Read →</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section id="playground">
+      <p class="stitle">02 / Playground</p>
+      <p class="prose" style="margin-bottom:22px;">Small, self-contained experiments. First up — a mini take on
+        <b>Beacon Reports</b>: edit the JSON on the left and the dashboard re-renders live on the right.</p>
+
+      <div class="demo">
+        <div class="demo__bar"><span class="dot"></span><b>json → dashboard</b><span>live · edit the JSON</span></div>
+        <div class="demo__grid">
+          <textarea id="json" spellcheck="false" aria-label="Dashboard JSON"></textarea>
+          <div id="render" class="render"></div>
+        </div>
+        <p id="jsonerr" class="demo__err"></p>
+      </div>
+
+      <div class="slot">✦ More experiments coming — this is where new demos will live.</div>
+    </section>
+  </main>
+
+  <footer>© 2026 Dustin Lin · built in the open ✦ <a href="index.html">back home</a></footer>
+
+  <script>
+  /* ===== Playground: JSON → dashboard ===== */
+  (function(){
+    const ta=document.getElementById('json'), out=document.getElementById('render'), err=document.getElementById('jsonerr');
+    const sample=[
+      { type:'stat', label:'1M-row ingest', value:'6 s' },
+      { type:'stat', label:'Annual savings', value:'~$120K' },
+      { type:'bar', label:'Report load time', items:[
+        { label:'before', value:100 },
+        { label:'after',  value:20 }
+      ]},
+      { type:'note', label:'try it', text:'Edit this JSON — the dashboard re-renders as you type.' }
+    ];
+    function el(tag,cls,html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+    function esc(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+    function render(list){
+      out.innerHTML='';
+      if(!Array.isArray(list)) throw new Error('Top level must be an array of widgets');
+      list.forEach((w,i)=>{
+        if(!w||typeof w!=='object') throw new Error('Widget '+i+' is not an object');
+        const card=el('div','w w--'+(w.type||'x'));
+        if(w.type==='stat'){
+          card.append(el('div','w__label',esc(w.label||'')));
+          card.append(el('div','w__val',esc(w.value==null?'—':w.value)));
+        } else if(w.type==='bar'){
+          card.append(el('div','w__label',esc(w.label||'')));
+          const items=Array.isArray(w.items)?w.items:[];
+          const max=Math.max(1,...items.map(it=>Number(it.value)||0));
+          items.forEach(it=>{
+            const row=el('div','bar');
+            row.append(el('span','bar__name',esc(it.label||'')));
+            const track=el('div','bar__track'), fill=el('div','bar__fill');
+            fill.style.width=Math.max(2,(Number(it.value)||0)/max*100)+'%';
+            track.append(fill); row.append(track);
+            row.append(el('span','bar__v',esc(it.value==null?'':it.value)));
+            card.append(row);
+          });
+        } else if(w.type==='note'){
+          if(w.label) card.append(el('div','w__label',esc(w.label)));
+          card.append(el('div',null,esc(w.text||'')));
+        } else {
+          card.append(el('div','w__label','unknown type'));
+          card.append(el('div',null,esc(w.type||'')));
+        }
+        out.append(card);
+      });
+    }
+    function update(){
+      try{ render(JSON.parse(ta.value)); err.textContent=''; }
+      catch(e){ err.textContent='⚠ '+e.message; }
+    }
+    ta.value=JSON.stringify(sample,null,2);
+    ta.addEventListener('input',update);
+    update();
+  })();
+  </script>
+  <script src="nav.js"></script>
+</body>
+</html>

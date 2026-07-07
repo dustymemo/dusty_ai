@@ -1,0 +1,37 @@
+/* ============================================================
+   BRAND TOKENS — edit THIS file to rebrand the whole site.
+   Every page links theme.css, so your colors, fonts, and layout
+   width live in ONE place. Change a value here and it updates
+   the home page, blog, and every post at once.
+
+   Want a different font? Swap the Google Fonts <link> in each
+   page's <head>, then update --serif / --sans / --mono below.
+   ============================================================ */
+:root{
+  /* ---- Surfaces (backgrounds) ---- */
+  --paper:#f5efe1;      /* page background        */
+  --paper2:#efe7d5;     /* subtle panel / bars    */
+  --card:#fbf7ee;       /* cards                  */
+  --border:#e3d9c4;     /* hairlines / borders    */
+
+  /* ---- Text ---- */
+  --ink:#2b395b;        /* headings / strong text */
+  --ink-soft:#5a6480;   /* secondary headings     */
+  --graphite:#6b6559;   /* body text              */
+
+  /* ---- Accents ---- */
+  --highlight:#f2bd1e;  /* primary accent / highlighter */
+  --sage:#9cae8f;       /* labels / secondary accent    */
+  --sky:#a8c4d8;        /* diagram: source nodes  */
+  --peach:#e9b596;      /* diagram: service nodes */
+  --blush:#e5b3bd;      /* diagram: agent nodes   */
+  --danger:#b4453a;     /* error text             */
+
+  /* ---- Fonts ---- */
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+
+  /* ---- Layout ---- */
+  --max:960px;          /* max content width      */
+}

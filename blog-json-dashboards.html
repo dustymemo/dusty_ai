@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why our dashboards are JSON, not code — Dustin Lin</title>
+  <meta name="description" content="How Beacon Reports turned dashboards into declarative JSON documents you can author from a prompt." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;}
+    a{color:inherit;text-decoration:none;}
+    .nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+      padding:14px clamp(18px,4vw,40px);background:rgba(245,239,225,.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+    .nav .brand{font-family:var(--mono);font-weight:700;}.nav .brand b{color:var(--highlight);}
+    .nav .links{display:flex;align-items:center;gap:clamp(12px,2.4vw,24px);}
+    .nav .links a{font-family:var(--mono);font-size:.82rem;color:var(--graphite);}
+    .nav .links a:hover{color:var(--ink);}
+    .nav .links a.active{color:var(--ink);position:relative;}
+    .nav .links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--highlight);}
+    .nav .resume{border:1px solid var(--ink);border-radius:100px;padding:5px 13px;color:var(--ink)!important;}
+    .nav .resume:hover{background:var(--ink);color:var(--paper)!important;}
+    .nav .resume::after{display:none;}
+    .nav__menu{display:none;background:none;border:none;cursor:pointer;font-size:1.4rem;line-height:1;color:var(--ink);padding:2px 6px;font-family:var(--mono);}
+    @media(max-width:640px){
+      .nav__menu{display:inline-flex;}
+      .nav .links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;
+        background:var(--paper);border-bottom:1px solid var(--border);padding:6px 0 10px;box-shadow:0 14px 26px -16px rgba(43,57,91,.4);display:none;}
+      .nav.open .links{display:flex;}
+      .nav .links a{padding:11px clamp(18px,4vw,40px);}
+      .nav .links a.active::after{display:none;}
+      .nav .resume{margin:8px clamp(18px,4vw,40px) 2px;text-align:center;}
+    }
+
+    .article{max-width:720px;margin:0 auto;padding:0 clamp(20px,5vw,24px) 40px;}
+    .back{font-family:var(--mono);font-size:.78rem;color:var(--graphite);display:inline-flex;gap:6px;align-items:center;}
+    .back:hover{color:var(--ink);}
+    .ahead{padding:clamp(40px,7vh,68px) 0 26px;border-bottom:1px solid var(--border);margin-bottom:32px;}
+    .ahead__meta{display:flex;align-items:center;gap:12px;margin:22px 0 0;}
+    .cat{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);
+      background:rgba(242,189,30,.28);border:1px solid rgba(242,189,30,.5);border-radius:100px;padding:3px 10px;}
+    .date{font-family:var(--mono);font-size:.74rem;color:var(--sage);}
+    .ahead h1{font-family:var(--serif);font-size:clamp(2rem,5.4vw,3.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.04;margin-top:16px;}
+    .ahead .lead{margin-top:16px;color:var(--graphite);font-size:1.14rem;}
+    .body p{color:var(--graphite);font-size:1.06rem;margin-bottom:18px;}
+    .body h2{font-family:var(--serif);font-size:1.42rem;color:var(--ink);margin:34px 0 12px;letter-spacing:-.01em;}
+    .body b{color:var(--ink);}
+    .body code{font-family:var(--mono);font-size:.86em;background:var(--paper2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;}
+    .body ul{margin:0 0 18px 4px;list-style:none;}
+    .body li{position:relative;padding-left:20px;color:var(--graphite);margin-bottom:8px;}
+    .body li::before{content:"▹";position:absolute;left:0;color:var(--sage);}
+    .body pre{font-family:var(--mono);font-size:.82rem;line-height:1.6;background:var(--card);border:1px solid var(--border);
+      border-radius:8px;padding:16px 18px;overflow-x:auto;margin-bottom:18px;color:var(--ink);}
+    .tags{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin:30px 0 0;}
+    .tags li{font-family:var(--mono);font-size:.7rem;border:1px solid var(--ink);border-radius:2px;padding:3px 9px;}
+    .endnav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:24px;border-top:1px solid var(--border);
+      font-family:var(--mono);font-size:.8rem;}
+    .endnav a:hover{color:var(--highlight);}
+    footer{text-align:center;padding:40px 20px 60px;color:var(--graphite);font-family:var(--mono);font-size:.8rem;border-top:1px solid var(--border);}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important;}}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <a href="index.html" class="brand">dusty<b>_ai</b></a>
+    <button class="nav__menu" aria-label="Menu" aria-expanded="false">☰</button>
+    <nav class="links">
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="index.html#connect">Connect</a>
+      <a class="resume" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+  </header>
+
+  <article class="article">
+    <header class="ahead">
+      <a class="back" href="blog.html">← Back to blog</a>
+      <div class="ahead__meta"><span class="cat">Engineering</span><span class="date">2026 · 06</span></div>
+      <h1>Why our dashboards are JSON, not code</h1>
+      <p class="lead">How Beacon Reports turned dashboards into declarative documents you can author from a prompt — and validate before they ever hit the UI.</p>
+    </header>
+
+    <div class="body">
+      <p>Most BI tools make a dashboard a pile of clicks. That's fine until you want to review a change, generate one
+        programmatically, or let a model build it for you — and suddenly there's nothing to reason about. On
+        <b>Beacon Reports</b> I made the dashboard itself the artifact: a <b>JSON document</b>, rendered by a small
+        registry of ~20 widgets.</p>
+
+      <h2>The shape</h2>
+      <p>Every widget is a typed object. A dashboard is just an array of them:</p>
+      <pre>[
+  { "type": "stat", "label": "1M-row ingest", "value": "6 s" },
+  { "type": "bar",  "label": "Report load",
+    "items": [ {"label":"before","value":100}, {"label":"after","value":20} ] }
+]</pre>
+      <p>The renderer walks the array and maps each <code>type</code> to a component. Add a widget type once, and every
+        dashboard can use it. (There's a live version of exactly this on the <a href="blog.html#playground" style="text-decoration:underline;text-decoration-color:var(--highlight);">Playground</a>.)</p>
+
+      <h2>Why it matters</h2>
+      <ul>
+        <li>Because it's data, an <b>LLM can author a dashboard from a prompt</b> — and we validate the JSON before it renders.</li>
+        <li>Every change is a <b>reviewable diff</b>, not an opaque UI state.</li>
+        <li>Non-engineers ship dashboards in <b>minutes</b>, no eng ticket required.</li>
+        <li>Values resolve against <b>safe, parameterized SQL</b> — no string-built queries.</li>
+      </ul>
+
+      <h2>The lesson</h2>
+      <p>Turning a UI into a declarative document is the same trick that makes infrastructure-as-code work: once the
+        thing is data, everything else — generation, validation, review, versioning — comes almost for free.</p>
+
+      <ul class="tags"><li>Beacon Reports</li><li>JSON</li><li>LLM</li><li>Snowflake</li><li>BI</li></ul>
+
+      <nav class="endnav">
+        <a href="blog.html">← All posts</a>
+        <a href="blog-snowflake-ingestion.html">Next: 30 min → 6 s →</a>
+      </nav>
+    </div>
+  </article>
+
+  <footer>© 2026 Dustin Lin</footer>
+  <script src="nav.js"></script>
+</body>
+</html>

@@ -8,16 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="theme.css" />
   <style>
-    :root{
-      --paper:#f5efe1; --paper2:#efe7d5; --card:#fbf7ee; --border:#e3d9c4;
-      --ink:#2b395b; --ink-soft:#5a6480; --graphite:#6b6559;
-      --highlight:#f2bd1e; --sage:#9cae8f; --sky:#a8c4d8; --peach:#e9b596; --blush:#e5b3bd;
-      --serif:'Fraunces',Georgia,'Times New Roman',serif;
-      --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
-      --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
-      --max:960px;
-    }
     *{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
     body{font-family:var(--sans);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;}
@@ -31,7 +23,15 @@
     .nav .links a:hover{color:var(--ink);}
     .nav .resume{border:1px solid var(--ink);border-radius:100px;padding:5px 13px;color:var(--ink)!important;}
     .nav .resume:hover{background:var(--ink);color:var(--paper)!important;}
-    @media(max-width:640px){.nav .links a:not(.resume){display:none;}}
+    .nav__menu{display:none;background:none;border:none;cursor:pointer;font-size:1.4rem;line-height:1;color:var(--ink);padding:2px 6px;font-family:var(--mono);}
+    @media(max-width:640px){
+      .nav__menu{display:inline-flex;}
+      .nav .links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;
+        background:var(--paper);border-bottom:1px solid var(--border);padding:6px 0 10px;box-shadow:0 14px 26px -16px rgba(43,57,91,.4);display:none;}
+      .nav.open .links{display:flex;}
+      .nav .links a{padding:11px clamp(18px,4vw,40px);}
+      .nav .resume{margin:8px clamp(18px,4vw,40px) 2px;text-align:center;}
+    }
 
     /* HERO */
     .hero{position:relative;min-height:clamp(520px,82vh,760px);display:flex;align-items:center;overflow:hidden;
@@ -199,8 +199,9 @@
 <body>
   <header class="nav">
     <a href="#top" class="brand">dusty<b>_ai</b></a>
+    <button class="nav__menu" aria-label="Menu" aria-expanded="false">☰</button>
     <nav class="links">
-      <a href="#experience">Experience</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="#ask">Ask</a><a href="#connect">Connect</a>
+      <a href="#experience">Experience</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="blog.html">Blog</a><a href="#connect">Connect</a>
       <a class="resume" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
     </nav>
   </header>
@@ -212,8 +213,8 @@
       <img class="hero__avatar" src="assets/profile.png" alt="Dustin Lin" width="94" height="94" />
       <p class="hero__eyebrow">Software Engineer • AI • System Design</p>
       <h1>Good software<br>starts with<br>great <em>systems</em>.</h1>
-      <p class="hero__sub">Hi, I'm <b>Dustin Lin</b>.<br><br>I build multi-tenant data platforms and AI agents at <b>ODAIA</b>.
-        Off the clock I ship my own agents and run <b>dusty.notes_</b> — an AI Instagram that runs itself.</p>
+      <p class="hero__sub">Hi, I'm <b>Dustin Lin</b>.<br><br>I build <b>multi-tenant data platforms</b> and <b>AI agents</b> — moving
+        real data at scale and making systems that hold up in production. Off the clock, I keep shipping my own agents and experiments.</p>
       <div class="hero__cta">
         <a class="btn btn--p" href="#work">View my work</a>
         <a class="btn btn--g" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
@@ -230,7 +231,7 @@
 
   <main>
     <section id="experience">
-      <p class="stitle">01 / Work Experience</p>
+      <p class="stitle">01 / Experience</p>
       <div class="timeline">
         <article class="job job--now">
           <div class="job__co-head"><span class="job__co-name">ODAIA Intelligence</span><span class="job__yr">2023 — Present</span></div>
@@ -477,5 +478,6 @@
     addBot("Hi! I'm a little agent that knows Dustin's work. Ask me about his experience, skills, the projects he's built, his AI agents, or how to reach him.");
   })();
   </script>
+  <script src="nav.js"></script>
 </body>
 </html>
