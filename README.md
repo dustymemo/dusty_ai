@@ -5,7 +5,9 @@ Plain HTML/CSS/JS — no build step, no framework — and free to host on GitHub
 
 ![Preview of the personal website template](assets/preview.png)
 
-**Live demo:** https://dustymemo.github.io/dusty_ai/
+### ⚡ [**Use this template to build your own site →**](https://github.com/dustymemo/dusty_ai/generate)
+
+**Live demo:** https://dustymemo.github.io/dusty_ai/ · **New to this?** → [START-HERE.md](START-HERE.md)
 
 ---
 
