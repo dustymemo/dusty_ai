@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dustin Lin — Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <style>
+    :root{
+      --paper:#f5efe1; --paper2:#efe7d5; --card:#fbf7ee; --border:#e3d9c4;
+      --ink:#2b395b; --ink-soft:#5a6480; --graphite:#6b6559;
+      --highlight:#f2bd1e; --sage:#9cae8f; --sky:#a8c4d8; --peach:#e9b596; --blush:#e5b3bd;
+      --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+      --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+      --max:960px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;}
+    a{color:inherit;text-decoration:none;}
+
+    .nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+      padding:14px clamp(18px,4vw,40px);background:rgba(245,239,225,.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+    .nav .brand{font-family:var(--mono);font-weight:700;}.nav .brand b{color:var(--highlight);}
+    .nav .links{display:flex;align-items:center;gap:clamp(12px,2.4vw,24px);}
+    .nav .links a{font-family:var(--mono);font-size:.82rem;color:var(--graphite);}
+    .nav .links a:hover{color:var(--ink);}
+    .nav .resume{border:1px solid var(--ink);border-radius:100px;padding:5px 13px;color:var(--ink)!important;}
+    .nav .resume:hover{background:var(--ink);color:var(--paper)!important;}
+    @media(max-width:640px){.nav .links a:not(.resume){display:none;}}
+
+    /* HERO */
+    .hero{position:relative;min-height:clamp(520px,82vh,760px);display:flex;align-items:center;overflow:hidden;
+      border-bottom:1px solid var(--border);}
+    #arch{position:absolute;inset:0;width:100%;height:100%;display:block;}
+    .hero__inner{position:relative;z-index:2;max-width:var(--max);margin:0 auto;padding:0 clamp(20px,5vw,24px);width:100%;pointer-events:none;}
+    .hero__eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:14px;}
+    .hero h1{font-size:clamp(2.6rem,8vw,5rem);font-weight:900;line-height:.98;letter-spacing:-.035em;max-width:14ch;}
+    .hero h1 em{font-style:normal;color:var(--ink);position:relative;}
+    .hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.08em;height:.32em;background:rgba(242,189,30,.5);z-index:-1;}
+    .hero__sub{margin-top:22px;font-size:1.12rem;color:var(--graphite);max-width:44ch;}
+    .hero__sub b{color:var(--ink);}
+    .hero__cta{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;pointer-events:auto;}
+    .btn{font-family:var(--mono);font-size:.85rem;padding:12px 22px;border-radius:100px;transition:transform .15s;}
+    .btn:hover{transform:translateY(-2px);}
+    .btn--p{background:var(--ink);color:var(--paper);box-shadow:0 8px 22px -8px rgba(43,57,91,.5);}
+    .btn--g{border:1px solid var(--ink);background:rgba(251,247,238,.6);}
+    .legend{position:absolute;bottom:16px;left:0;right:0;z-index:2;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
+      font-family:var(--mono);font-size:.7rem;color:var(--graphite);pointer-events:none;}
+    .legend span{display:flex;align-items:center;gap:6px;}
+    .legend i{width:9px;height:9px;border-radius:50%;display:block;}
+
+    main{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,5vw,24px);}
+    section{padding:72px 0;}
+    .stitle{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite);
+      display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+    .stitle::before{content:"";width:26px;height:2px;background:var(--highlight);}
+    .prose{color:var(--graphite);max-width:60ch;font-size:1.06rem;}.prose strong{color:var(--ink);}
+    .tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px;}
+    .tags li{list-style:none;font-family:var(--mono);font-size:.75rem;padding:5px 12px;background:var(--card);border:1px solid var(--border);border-radius:100px;color:var(--graphite);}
+
+    .timeline{display:flex;flex-direction:column;gap:6px;}
+    .job{display:grid;grid-template-columns:150px 1fr;gap:22px;padding:20px;border:1px solid transparent;border-radius:12px;transition:background .2s,border-color .2s;}
+    .job:hover{background:var(--card);border-color:var(--border);}
+    .job .yr{font-family:var(--mono);font-size:.8rem;color:var(--sage);padding-top:4px;}
+    .job h3{font-size:1.16rem;font-weight:700;}.job .co{color:var(--sage);font-weight:600;}
+    .job p{color:var(--graphite);margin-top:7px;font-size:.96rem;}
+    @media(max-width:600px){.job{grid-template-columns:1fr;gap:6px;}}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;
+      box-shadow:0 2px 10px rgba(43,57,91,.05);transition:transform .18s,box-shadow .2s;}
+    .card:hover{transform:translateY(-4px);box-shadow:0 16px 34px -18px rgba(43,57,91,.3);}
+    .card .media{aspect-ratio:16/9;border-bottom:1px solid var(--border);background:var(--paper2);}
+    .card .media img{width:100%;height:100%;object-fit:cover;display:block;}
+    .card .b{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;}
+    .card h3{font-size:1.16rem;font-weight:700;}
+    .card p{color:var(--graphite);font-size:.93rem;margin-top:6px;flex:1;}
+    .card .metrics{display:flex;gap:16px;margin:12px 0 0;}
+    .card .metrics div .n{font-weight:800;font-size:1.02rem;letter-spacing:-.02em;}
+    .card .metrics div .n em{font-style:normal;color:var(--highlight);}
+    .card .metrics div .l{font-family:var(--mono);font-size:.62rem;color:var(--graphite);text-transform:uppercase;}
+    .card .t{font-family:var(--mono);font-size:.68rem;color:var(--sage);margin-top:12px;}
+
+    .center{text-align:center;}.center .stitle{justify-content:center;}
+    .socials{display:flex;flex-wrap:wrap;gap:13px;justify-content:center;margin-top:24px;}
+    .social{display:flex;align-items:center;gap:9px;padding:11px 20px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-family:var(--mono);font-size:.85rem;transition:transform .15s,border-color .2s;}
+    .social:hover{transform:translateY(-2px);border-color:var(--sage);}
+    .social i{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:var(--ink);color:var(--paper);font-size:.66rem;font-weight:700;font-style:normal;}
+    footer{text-align:center;padding:40px 20px 60px;color:var(--graphite);font-family:var(--mono);font-size:.8rem;border-top:1px solid var(--border);}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important;}}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <a href="#top" class="brand">dusty<b>_ai</b></a>
+    <nav class="links">
+      <a href="#about">About</a><a href="#experience">Experience</a><a href="#work">Work</a><a href="#connect">Connect</a>
+      <a class="resume" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <canvas id="arch" aria-hidden="true"></canvas>
+    <div class="hero__inner">
+      <p class="hero__eyebrow">// senior software engineer · ml platform</p>
+      <h1>I design the systems <em>data</em> flows through.</h1>
+      <p class="hero__sub">Hi, I'm <b>Dustin Lin</b> — I build multi-tenant data platforms and AI agents at
+        <b>ODAIA</b>. Off the clock I ship my own agents and run <b>dusty.notes_</b>.</p>
+      <div class="hero__cta">
+        <a class="btn btn--p" href="#work">View my work</a>
+        <a class="btn btn--g" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--sky)"></i>source</span>
+      <span><i style="background:var(--sage)"></i>ingest</span>
+      <span><i style="background:var(--highlight)"></i>warehouse</span>
+      <span><i style="background:var(--peach)"></i>service</span>
+      <span><i style="background:var(--blush)"></i>agent</span>
+    </div>
+  </section>
+
+  <main>
+    <section id="about">
+      <p class="stitle">01 / About</p>
+      <p class="prose">I'm a software engineer with 4+ years building data platforms, ML pipelines, and AI
+        agents. At <strong>ODAIA</strong> I led a pharma analytics platform's migration from RDS to a
+        multi-tenant Snowflake architecture, and built the AI agent and BI systems on top of it. I like turning
+        hard, ambiguous problems into reliable, well-architected products.</p>
+      <ul class="tags"><li>Python</li><li>Snowflake</li><li>FastAPI</li><li>AWS</li><li>AI Agents</li><li>Multi-tenant Architecture</li><li>Data Engineering</li></ul>
+    </section>
+
+    <section id="experience">
+      <p class="stitle">02 / Work Experience</p>
+      <div class="timeline">
+        <article class="job"><span class="yr">2024 — Present</span><div><h3>Senior Software Developer, ML Platform <span class="co">· ODAIA</span></h3><p>Led the RDS → Snowflake migration (~$120K/yr saved, 1M-row ingest 30 min → 6 s). Built FastAPI services, Typer + Bitbucket deploy automation, and shipped the Beacon AI agent and JSON-driven BI systems.</p></div></article>
+        <article class="job"><span class="yr">2023 — 2024</span><div><h3>Software Developer, ML Platform <span class="co">· ODAIA</span></h3><p>Optimized Maptual for large client data (−50% runtime) with multiprocessing + Step Functions. Built Maptual Labs (−80% QA time) and a FastAPI data layer.</p></div></article>
+        <article class="job"><span class="yr">2021 — 2023</span><div><h3>Software Developer <span class="co">· Cymax Group</span></h3><p>AI listing-error analyzer ($100K+ saved), computer-vision SKU-reversal app on Kubernetes, and an ML lead-time calculator (Amazon late shipping &lt;4%).</p></div></article>
+      </div>
+    </section>
+
+    <section id="work">
+      <p class="stitle">03 / Selected Work · ODAIA</p>
+      <div class="grid">
+        <article class="card"><div class="media"><img src="assets/work/snowflake-migration.jpg" alt="Snowflake" loading="lazy"/></div><div class="b"><h3>RDS → Snowflake Migration</h3><p>Multi-tenant Snowflake architecture with an idempotent MERGE ingestion pipeline and one-line onboarding.</p><div class="metrics"><div><div class="n">30m<em>→</em>6s</div><div class="l">1M ingest</div></div><div><div class="n"><em>$</em>120K</div><div class="l">saved/yr</div></div></div><div class="t">Snowflake · Python · AWS · SQLAlchemy</div></div></article>
+        <article class="card"><div class="media"><img src="assets/work/beacon-reports.jpg" alt="Beacon Reports" loading="lazy"/></div><div class="b"><h3>Beacon Reports — JSON BI</h3><p>Declarative BI: dashboards as JSON, rendered by a ~20-widget registry, authored from prompts.</p><div class="metrics"><div><div class="n">20<em>+</em></div><div class="l">widgets</div></div><div><div class="n">prompt<em>→</em>JSON</div><div class="l">authoring</div></div></div><div class="t">Next.js · FastAPI · Snowflake · LLM</div></div></article>
+        <article class="card"><div class="media"><img src="assets/work/beacon-agent.jpg" alt="Beacon Agent" loading="lazy"/></div><div class="b"><h3>Beacon Agent Platform</h3><p>Distributed AI agent connecting a chat UI to Claude Code workers via a smart routing gateway.</p><div class="metrics"><div><div class="n">3<em>-tier</em></div><div class="l">services</div></div><div><div class="n">sticky<em>+</em>SSE</div><div class="l">routing</div></div></div><div class="t">FastAPI · Claude Code · DynamoDB · AWS</div></div></article>
+        <article class="card"><div class="media"><img src="assets/work/agent-rbac.jpg" alt="Agent RBAC" loading="lazy"/></div><div class="b"><h3>Agent RBAC &amp; Skills</h3><p>Scope-as-environment security model, RBAC enforced at four independent layers.</p><div class="metrics"><div><div class="n">4<em>-layer</em></div><div class="l">defense</div></div><div><div class="n">det.</div><div class="l">skills</div></div></div><div class="t">Security · RBAC · Multi-tenant · Python</div></div></article>
+      </div>
+    </section>
+
+    <section id="projects">
+      <p class="stitle">04 / Personal Projects</p>
+      <div class="grid">
+        <a class="card" href="https://www.instagram.com/dusty.notes_/" target="_blank" rel="noopener"><div class="media"><img src="assets/work/dusty-notes.jpg" alt="dusty.notes_" loading="lazy"/></div><div class="b"><h3>dusty.notes_</h3><p>An AI-powered Instagram that auto-generates and posts news and ideas.</p><div class="t">AI · Content · Automation</div></div></a>
+        <article class="card"><div class="media"><img src="assets/work/trading-agent.jpg" alt="Trading Agent" loading="lazy"/></div><div class="b"><h3>Trading Agent</h3><p>An autonomous agent that analyzes markets and executes strategies.</p><div class="t">Python · Agents · Finance</div></div></article>
+        <article class="card"><div class="media"><img src="assets/work/media-agent.jpg" alt="Media Agent" loading="lazy"/></div><div class="b"><h3>Media Agent</h3><p>A pipeline that generates and publishes media content end-to-end.</p><div class="t">AI · Media · Pipeline</div></div></article>
+      </div>
+    </section>
+
+    <section id="connect" class="center">
+      <p class="stitle">05 / Connect</p>
+      <p class="prose" style="margin:0 auto;">Want to work together or just say hi? Find me here.</p>
+      <div class="socials">
+        <a class="social" href="https://www.linkedin.com/in/dustinlin718/" target="_blank" rel="noopener"><i>in</i> LinkedIn</a>
+        <a class="social" href="https://www.instagram.com/dusty.notes_/" target="_blank" rel="noopener"><i>ig</i> dusty.notes_</a>
+        <a class="social" href="https://github.com/dustymemo" target="_blank" rel="noopener"><i>gh</i> GitHub</a>
+        <a class="social" href="mailto:dustinlin718@gmail.com"><i>@</i> Email</a>
+        <a class="social" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener"><i>cv</i> Résumé</a>
+      </div>
+    </section>
+  </main>
+  <footer>© 2026 Dustin Lin · data flows left to right ↗</footer>
+
+  <script>
+  (function(){
+    const canvas=document.getElementById('arch'), ctx=canvas.getContext('2d');
+    const C={paper:'#f5efe1',ink:'#2b395b',line:'#c9bfa6',sky:'#a8c4d8',sage:'#9cae8f',hl:'#f2bd1e',peach:'#e9b596',blush:'#e5b3bd'};
+    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let W,H,DPR,nodes=[],edges=[],pulses=[];
+    // logical layout in 0..1 space: source -> ingest -> warehouse -> service -> agent/ui
+    const layout=[
+      {id:'s1',x:.10,y:.30,c:'sky',r:9,label:'RDS'},
+      {id:'s2',x:.10,y:.55,c:'sky',r:9,label:'S3'},
+      {id:'s3',x:.10,y:.78,c:'sky',r:8,label:'API'},
+      {id:'st',x:.33,y:.5,c:'sage',r:12,label:'stage'},
+      {id:'wh',x:.56,y:.42,c:'hl',r:18,label:'Snowflake'},
+      {id:'sv',x:.78,y:.28,c:'peach',r:11,label:'FastAPI'},
+      {id:'ag',x:.80,y:.62,c:'blush',r:12,label:'agent'},
+      {id:'ui',x:.93,y:.5,c:'ink',r:9,label:'UI'}
+    ];
+    const conns=[['s1','st'],['s2','st'],['s3','st'],['st','wh'],['wh','sv'],['wh','ag'],['sv','ui'],['ag','ui'],['ag','sv']];
+    function resize(){
+      DPR=Math.min(window.devicePixelRatio||1,2);
+      const p=canvas.parentElement.getBoundingClientRect();
+      W=p.width;H=p.height;canvas.width=W*DPR;canvas.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+      nodes=layout.map(n=>({...n,px:n.x*W,py:n.y*H}));
+      const byId=Object.fromEntries(nodes.map(n=>[n.id,n]));
+      edges=conns.map(([a,b])=>({a:byId[a],b:byId[b]}));
+    }
+    function spawn(){
+      if(reduce) return;
+      const e=edges[Math.floor(Math.random()*edges.length)];
+      pulses.push({e,t:0,sp:0.006+Math.random()*0.006,col:C[e.a.c]||C.sage});
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      // edges
+      edges.forEach(e=>{
+        ctx.strokeStyle=C.line;ctx.lineWidth=1.4;ctx.globalAlpha=.55;
+        ctx.beginPath();ctx.moveTo(e.a.px,e.a.py);ctx.lineTo(e.b.px,e.b.py);ctx.stroke();
+      });
+      ctx.globalAlpha=1;
+      // pulses
+      pulses.forEach(p=>{
+        p.t+=p.sp;const x=p.e.a.px+(p.e.b.px-p.e.a.px)*p.t,y=p.e.a.py+(p.e.b.py-p.e.a.py)*p.t;
+        ctx.fillStyle=p.col;ctx.globalAlpha=.9;
+        ctx.beginPath();ctx.arc(x,y,3.2,0,7);ctx.fill();
+        ctx.globalAlpha=.25;ctx.beginPath();ctx.arc(x,y,7,0,7);ctx.fill();
+      });
+      ctx.globalAlpha=1;
+      pulses=pulses.filter(p=>p.t<1);
+      // nodes
+      nodes.forEach(n=>{
+        const col=C[n.c]||C.ink;
+        ctx.fillStyle='#fbf7ee';ctx.strokeStyle=col;ctx.lineWidth=2.4;
+        ctx.beginPath();ctx.arc(n.px,n.py,n.r,0,7);ctx.fill();ctx.stroke();
+        ctx.fillStyle=col;ctx.globalAlpha=.9;
+        ctx.beginPath();ctx.arc(n.px,n.py,n.r*0.42,0,7);ctx.fill();ctx.globalAlpha=1;
+        // label
+        ctx.fillStyle=C.ink;ctx.globalAlpha=.5;ctx.font='11px "JetBrains Mono", monospace';
+        ctx.textAlign='center';ctx.fillText(n.label,n.px,n.py+n.r+15);ctx.globalAlpha=1;
+      });
+    }
+    let last=0;
+    function loop(ts){
+      if(!reduce){ if(ts-last>420){spawn();last=ts;} }
+      draw();requestAnimationFrame(loop);
+    }
+    window.addEventListener('resize',resize);
+    resize();
+    if(reduce){ // seed a few static pulses mid-edge so it still reads as flow
+      edges.forEach((e,i)=>{ if(i%2===0) pulses.push({e,t:.5,sp:0,col:C[e.a.c]||C.sage}); });
+      draw();
+    } else { for(let i=0;i<5;i++) spawn(); requestAnimationFrame(loop); }
+  })();
+  </script>
+</body>
+</html>

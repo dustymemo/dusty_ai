@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dustin Lin — Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <style>
+    :root{
+      --paper:#f5efe1; --card:#fbf7ee; --border:#e3d9c4;
+      --ink:#2b395b; --graphite:#6b6559;
+      --highlight:#f2bd1e; --sage:#9cae8f; --sky:#a8c4d8; --peach:#e9b596; --blush:#e5b3bd;
+      --navy:#223051; --navy2:#1c273f; --navy-panel:#1f2a48; --navy-line:#3a4770;
+      --cream:#f5efe1; --dim:#8a97b8;
+      --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+      --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.6;}
+    a{color:inherit;}
+    .num{font-variant-numeric:tabular-nums;}
+
+    .shell{max-width:920px;margin:0 auto;padding:clamp(24px,5vw,52px) clamp(16px,4vw,24px) 20px;}
+
+    /* terminal window */
+    .term{background:var(--navy);border:1px solid var(--navy-line);border-radius:14px;overflow:hidden;
+      box-shadow:0 24px 60px -30px rgba(43,57,91,.6);}
+    .term__bar{display:flex;align-items:center;gap:8px;padding:11px 14px;background:var(--navy2);border-bottom:1px solid var(--navy-line);}
+    .term__bar i{width:11px;height:11px;border-radius:50%;background:#40507a;display:block;}
+    .term__bar i:first-child{background:var(--highlight);}
+    .term__bar span{margin-left:8px;font-family:var(--mono);font-size:.72rem;color:var(--dim);}
+    .term__body{padding:20px clamp(14px,3vw,22px) 18px;font-family:var(--mono);font-size:14px;color:var(--cream);
+      min-height:340px;max-height:60vh;overflow-y:auto;}
+    .out{white-space:pre-wrap;word-break:break-word;margin-bottom:2px;}
+    .out .p{color:var(--sage);} .out .path{color:var(--sky);} .out .dim{color:var(--dim);}
+    .out .hl{color:var(--highlight);} .out .b{color:#fff;font-weight:700;}
+    .out a{color:var(--sky);text-decoration:underline;text-underline-offset:2px;}
+    .line{display:flex;gap:8px;align-items:baseline;}
+    .line .p{color:var(--sage);} .line .sep{color:var(--dim);} .line .path{color:var(--sky);}
+    #cmd{background:transparent;border:0;outline:0;color:var(--cream);font-family:var(--mono);font-size:14px;
+      flex:1;caret-color:var(--highlight);}
+    .hint{margin-top:12px;font-family:var(--mono);font-size:.74rem;color:var(--graphite);text-align:center;}
+    .hint b{color:var(--ink);background:var(--card);border:1px solid var(--border);border-radius:5px;padding:1px 6px;}
+
+    /* content below (for non-typers / scroll) */
+    main{max-width:920px;margin:0 auto;padding:10px clamp(16px,4vw,24px) 72px;}
+    section{padding:52px 0;scroll-margin-top:20px;}
+    .stitle{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite);
+      display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+    .stitle::before{content:"";width:22px;height:2px;background:var(--highlight);}
+    .prose{color:var(--graphite);max-width:60ch;font-size:1.04rem;}
+    .prose strong{color:var(--ink);}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+      display:flex;flex-direction:column;transition:transform .16s;}
+    .card:hover{transform:translateY(-3px);}
+    .card .media{aspect-ratio:16/9;border-bottom:1px solid var(--border);background:var(--paper);}
+    .card .media img{width:100%;height:100%;object-fit:cover;display:block;}
+    .card .b{padding:15px 16px 17px;}
+    .card h3{font-size:1.06rem;font-weight:700;}
+    .card p{color:var(--graphite);font-size:.9rem;margin-top:5px;}
+    .card .t{font-family:var(--mono);font-size:.68rem;color:var(--sage);margin-top:11px;}
+    .job{display:grid;grid-template-columns:130px 1fr;gap:18px;padding:16px 4px;border-bottom:1px solid var(--border);}
+    .job:last-child{border-bottom:0;}
+    .job .yr{font-family:var(--mono);font-size:.78rem;color:var(--sage);}
+    .job h3{font-size:1.08rem;font-weight:600;}
+    .job .co{color:var(--sage);font-size:.9rem;} .job p{color:var(--graphite);font-size:.92rem;margin-top:6px;}
+    @media(max-width:600px){.job{grid-template-columns:1fr;gap:4px;}}
+    .socials{display:flex;flex-wrap:wrap;gap:12px;}
+    .social{display:flex;align-items:center;gap:9px;padding:11px 18px;background:var(--card);border:1px solid var(--border);
+      border-radius:100px;font-family:var(--mono);font-size:.84rem;transition:border-color .2s,transform .15s;}
+    .social:hover{border-color:var(--sage);transform:translateY(-2px);}
+    .social i{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:var(--ink);color:var(--paper);font-size:.64rem;font-weight:700;font-style:normal;}
+    footer{text-align:center;padding:26px;color:var(--graphite);font-family:var(--mono);font-size:.76rem;}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto;}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="term">
+      <div class="term__bar"><i></i><i></i><i></i><span>dustin@odaia: ~/portfolio — zsh</span></div>
+      <div class="term__body" id="screen" role="log" aria-live="polite">
+        <div class="out"><span class="dim"># Welcome. This is a real shell — type a command and hit Enter.</span></div>
+        <div class="out"><span class="dim"># Try:</span> <span class="hl">help</span> <span class="dim">·</span> <span class="hl">whoami</span> <span class="dim">·</span> <span class="hl">ls</span> <span class="dim">·</span> <span class="hl">open snowflake</span> <span class="dim">·</span> <span class="hl">resume</span></div>
+        <div class="out">&nbsp;</div>
+      </div>
+      <form id="form" class="line" style="padding:0 clamp(14px,3vw,22px) 18px;" autocomplete="off">
+        <span class="p">dustin@odaia</span><span class="sep">:</span><span class="path">~</span><span class="sep">$</span>
+        <input id="cmd" name="cmd" aria-label="terminal input" autofocus spellcheck="false" />
+      </form>
+    </div>
+    <p class="hint">Not into typing? Everything is below too. Try <b>help</b> to start.</p>
+  </div>
+
+  <main>
+    <section id="about">
+      <p class="stitle">~/about</p>
+      <p class="prose">I'm <strong>Dustin Lin</strong>, a software engineer with 4+ years building data platforms,
+        ML pipelines, and AI agents. At <strong>ODAIA</strong> I led a pharma analytics platform's migration
+        from RDS to a multi-tenant Snowflake architecture, and built the AI agent and BI systems on top of it.
+        Off the clock I ship my own AI agents and run <strong>dusty.notes_</strong>.</p>
+    </section>
+
+    <section id="work">
+      <p class="stitle">~/work · ODAIA</p>
+      <div class="grid">
+        <article class="card"><div class="media"><img src="assets/work/snowflake-migration.jpg" alt="Snowflake" loading="lazy"/></div><div class="b"><h3>RDS → Snowflake Migration</h3><p>Multi-tenant Snowflake; 1M rows 30 min → 6 s; ~$120K/yr saved.</p><div class="t">Snowflake · Python · AWS</div></div></article>
+        <article class="card"><div class="media"><img src="assets/work/beacon-reports.jpg" alt="Beacon Reports" loading="lazy"/></div><div class="b"><h3>Beacon Reports</h3><p>JSON-driven BI; dashboards from natural-language prompts.</p><div class="t">Next.js · FastAPI · LLM</div></div></article>
+        <article class="card"><div class="media"><img src="assets/work/beacon-agent.jpg" alt="Beacon Agent" loading="lazy"/></div><div class="b"><h3>Beacon Agent Platform</h3><p>Distributed AI agent; sticky routing + SSE to Claude Code workers.</p><div class="t">FastAPI · DynamoDB · AWS</div></div></article>
+        <article class="card"><div class="media"><img src="assets/work/agent-rbac.jpg" alt="RBAC" loading="lazy"/></div><div class="b"><h3>Agent RBAC &amp; Skills</h3><p>Scope-as-environment security enforced at four layers.</p><div class="t">Security · RBAC · Python</div></div></article>
+      </div>
+    </section>
+
+    <section id="experience">
+      <p class="stitle">~/experience</p>
+      <div class="job"><span class="yr">2024 — Now</span><div><h3>Senior SWE, ML Platform <span class="co">· ODAIA</span></h3><p>RDS → Snowflake migration (~$120K/yr saved). FastAPI services, Typer/Bitbucket automation, Beacon agent + BI.</p></div></div>
+      <div class="job"><span class="yr">2023 — 2024</span><div><h3>SWE, ML Platform <span class="co">· ODAIA</span></h3><p>Optimized Maptual (−50% runtime); built Maptual Labs (−80% QA time) and a FastAPI data layer.</p></div></div>
+      <div class="job"><span class="yr">2021 — 2023</span><div><h3>Software Developer <span class="co">· Cymax Group</span></h3><p>AI listing-error analyzer ($100K+ saved), CV app on Kubernetes, ML lead-time calculator.</p></div></div>
+    </section>
+
+    <section id="connect">
+      <p class="stitle">~/connect</p>
+      <div class="socials">
+        <a class="social" href="https://www.linkedin.com/in/dustinlin718/" target="_blank" rel="noopener"><i>in</i> LinkedIn</a>
+        <a class="social" href="https://www.instagram.com/dusty.notes_/" target="_blank" rel="noopener"><i>ig</i> dusty.notes_</a>
+        <a class="social" href="https://github.com/dustymemo" target="_blank" rel="noopener"><i>gh</i> GitHub</a>
+        <a class="social" href="mailto:dustinlin718@gmail.com"><i>@</i> Email</a>
+        <a class="social" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener"><i>cv</i> Résumé</a>
+      </div>
+    </section>
+  </main>
+  <footer>© 2026 Dustin Lin · type `sudo hire dustin`</footer>
+
+  <script>
+    const screen = document.getElementById('screen');
+    const form = document.getElementById('form');
+    const cmd = document.getElementById('cmd');
+    const history = []; let hIdx = 0;
+
+    const projects = {
+      snowflake:{t:'RDS → Snowflake Migration',d:'Multi-tenant Snowflake, DB-per-client, idempotent MERGE. 1M rows 30min→6s, ~$120K/yr saved.',id:'work'},
+      'beacon-reports':{t:'Beacon Reports',d:'JSON-driven BI; ~20 widget types; dashboards authored from natural-language prompts.',id:'work'},
+      'beacon-agent':{t:'Beacon Agent Platform',d:'Distributed AI agent; sticky routing + conversation locks + SSE to Claude Code workers.',id:'work'},
+      rbac:{t:'Agent RBAC & Skills',d:'Scope-as-environment security; RBAC enforced at four independent layers.',id:'work'}
+    };
+    const esc = s => s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+    function print(html){ const d=document.createElement('div'); d.className='out'; d.innerHTML=html; screen.appendChild(d); screen.scrollTop=screen.scrollHeight; }
+    function echo(input){ print('<span class="p">dustin@odaia</span><span class="dim">:</span><span class="path">~</span><span class="dim">$</span> '+esc(input)); }
+
+    const cmds = {
+      help(){ return `available commands:
+  <span class="hl">whoami</span>      who is this
+  <span class="hl">about</span>       the short bio
+  <span class="hl">ls</span>          list sections (about, work, experience, connect)
+  <span class="hl">ls work</span>     list ODAIA projects
+  <span class="hl">open</span> &lt;x&gt;    open a project  (e.g. <span class="hl">open snowflake</span>)
+  <span class="hl">experience</span>  career history
+  <span class="hl">resume</span>      open my résumé (PDF)
+  <span class="hl">contact</span>     how to reach me
+  <span class="hl">clear</span>       clear the screen`; },
+      whoami(){ return `<span class="b">Dustin Lin</span> — Senior Software Engineer, ML Platform @ <span class="hl">ODAIA</span>
+Richmond, BC · 4+ yrs · builds multi-tenant data platforms & AI agents · runs dusty.notes_`; },
+      about(){ document.getElementById('about').scrollIntoView({behavior:'smooth'}); return cmds.whoami()+'\n<span class="dim"># scrolled to ~/about below.</span>'; },
+      ls(arg){
+        if(arg==='work'||arg==='projects'){ return 'ODAIA projects:  '+Object.keys(projects).map(k=>'<span class="hl">'+k+'</span>').join('   ')+'\n<span class="dim"># open one:</span> open snowflake'; }
+        return 'sections:  <span class="hl">about</span>   <span class="hl">work</span>   <span class="hl">experience</span>   <span class="hl">connect</span>'; },
+      open(arg){
+        if(!arg) return 'usage: open &lt;project|section&gt;  ·  try: open snowflake';
+        const sec=document.getElementById(arg);
+        if(projects[arg]){ const p=projects[arg]; document.getElementById('work').scrollIntoView({behavior:'smooth'}); return '<span class="b">'+esc(p.t)+'</span>\n'+esc(p.d)+'\n<span class="dim"># scrolled to ~/work.</span>'; }
+        if(sec){ sec.scrollIntoView({behavior:'smooth'}); return '<span class="dim"># opened ~/'+esc(arg)+'</span>'; }
+        return 'not found: '+esc(arg)+'  ·  try: ls  /  ls work'; },
+      experience(){ document.getElementById('experience').scrollIntoView({behavior:'smooth'}); return `2024–now   Senior SWE, ML Platform · ODAIA
+2023–2024  SWE, ML Platform · ODAIA
+2021–2023  Software Developer · Cymax Group
+<span class="dim"># full detail in ~/experience below.</span>`; },
+      resume(){ window.open('assets/Dustin-Lin-Resume.pdf','_blank'); return '<span class="dim"># opening résumé.pdf …</span>'; },
+      cv(){ return cmds.resume(); },
+      contact(){ document.getElementById('connect').scrollIntoView({behavior:'smooth'}); return `email     <a href="mailto:dustinlin718@gmail.com">dustinlin718@gmail.com</a>
+linkedin  <a href="https://www.linkedin.com/in/dustinlin718/" target="_blank" rel="noopener">/in/dustinlin718</a>
+github    <a href="https://github.com/dustymemo" target="_blank" rel="noopener">@dustymemo</a>
+instagram <a href="https://www.instagram.com/dusty.notes_/" target="_blank" rel="noopener">dusty.notes_</a>`; },
+      connect(){ return cmds.contact(); },
+      clear(){ screen.innerHTML=''; return null; },
+      sudo(){ return "nice try. but you can just <span class=\"hl\">hire dustin</span> the normal way :)"; }
+    };
+    function run(raw){
+      const input = raw.trim(); if(!input) return;
+      echo(input); history.push(input); hIdx=history.length;
+      const [c,...rest]=input.split(/\s+/); const arg=rest.join(' ').toLowerCase();
+      const fn = cmds[c.toLowerCase()];
+      if(c.toLowerCase()==='hire'){ print('<span class="hl">❤</span> email me: <a href="mailto:dustinlin718@gmail.com">dustinlin718@gmail.com</a>'); return; }
+      if(!fn){ print('command not found: '+esc(c)+'  ·  type <span class="hl">help</span>'); return; }
+      const out = fn(arg); if(out!==null && out!==undefined) print(out);
+    }
+    form.addEventListener('submit',e=>{ e.preventDefault(); run(cmd.value); cmd.value=''; });
+    cmd.addEventListener('keydown',e=>{
+      if(e.key==='ArrowUp'){ if(hIdx>0){hIdx--;cmd.value=history[hIdx]||'';} e.preventDefault(); }
+      else if(e.key==='ArrowDown'){ if(hIdx<history.length){hIdx++;cmd.value=history[hIdx]||'';} e.preventDefault(); }
+    });
+    document.querySelector('.term').addEventListener('click',()=>cmd.focus());
+  </script>
+</body>
+</html>
