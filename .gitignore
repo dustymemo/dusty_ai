@@ -35,3 +35,7 @@ desktop.ini
 
 # Claude local skills (copied from media-agent)
 .claude/
+
+# Tooling / scratch artifacts
+.playwright-cli/
+output/

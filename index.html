@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dustin Lin — AI Builder & Creator</title>
-  <meta name="description" content="Personal site of Dustin Lin — AI projects, work experience, and dusty_notes." />
+  <title>Dustin Lin — Software Engineer & AI Builder</title>
+  <meta name="description" content="Portfolio of Dustin Lin — Senior Software Engineer (ML Platform) at ODAIA. Multi-tenant data platforms, AI agents, and dusty.notes_." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -18,8 +20,10 @@
     <nav class="nav__links">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
+      <a href="#work">Work</a>
       <a href="#projects">Projects</a>
       <a href="#connect">Connect</a>
+      <a class="nav__resume" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
     </nav>
   </header>
 
@@ -29,13 +33,14 @@
       <p class="hero__eyebrow">Hi, I'm</p>
       <h1 class="hero__name">Dustin Lin</h1>
       <p class="hero__tagline">
-        AI builder &amp; creator. I build intelligent agents, ship products, and run
-        <a href="https://instagram.com/dusty_notes" target="_blank" rel="noopener">dusty_notes</a> —
+        Senior Software Engineer on ML Platform at <strong>ODAIA</strong> — I build multi-tenant
+        data platforms and AI agents. Off the clock I ship my own agents and run
+        <a href="https://www.instagram.com/dusty.notes_/" target="_blank" rel="noopener">dusty.notes_</a>,
         where I use AI to post news and ideas.
       </p>
       <div class="hero__cta">
-        <a class="btn btn--primary" href="#projects">View my work</a>
-        <a class="btn btn--ghost" href="#connect">Get in touch</a>
+        <a class="btn btn--primary" href="#work">View my work</a>
+        <a class="btn btn--ghost" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
       </div>
     </section>
 
@@ -43,16 +48,20 @@
     <section id="about" class="section reveal">
       <h2 class="section__title"><span>01.</span> About</h2>
       <p class="prose">
-        I'm a builder focused on AI agents and automation. I like turning ideas into working
-        products fast — from trading agents to media pipelines to content tools. Outside of
-        building, I create AI-driven content for a growing audience.
+        I'm a software engineer with 4+ years building data platforms, ML pipelines, and AI
+        agents. At ODAIA I led a pharma analytics platform's migration from RDS to a
+        multi-tenant Snowflake architecture, and built the AI agent and BI systems on top of it.
+        I like turning hard, ambiguous problems into reliable, well-architected products — and
+        outside of work I ship my own AI agents and create content for a growing audience.
       </p>
       <ul class="tags">
-        <li>AI Agents</li>
-        <li>Automation</li>
         <li>Python</li>
-        <li>Content Creation</li>
-        <li>Product</li>
+        <li>Snowflake</li>
+        <li>FastAPI</li>
+        <li>AWS</li>
+        <li>AI Agents</li>
+        <li>Multi-tenant Architecture</li>
+        <li>Data Engineering</li>
       </ul>
     </section>
 
@@ -65,76 +74,161 @@
             <span class="job__date">2024 — Present</span>
           </div>
           <div class="job__body">
-            <h3 class="job__role">Founder / AI Builder <span class="job__company">· Independent</span></h3>
-            <p>Building autonomous AI agents and content systems. Shipped multiple media and
-              trading agents, and run the dusty_notes AI content brand.</p>
+            <h3 class="job__role">Senior Software Developer, ML Platform <span class="job__company">· ODAIA Intelligence</span></h3>
+            <p>Led the migration of a pharma analytics platform from RDS to a multi-tenant
+              Snowflake architecture — restructuring the ML pipeline for ~$120K/yr in savings and
+              cutting 1M-row ingestion from 30 min to 6 s. Built FastAPI data services, automated
+              multi-tenant deployments with a Typer CLI + Bitbucket pipelines, and shipped the
+              Beacon AI agent and JSON-driven BI systems on top.</p>
           </div>
         </article>
         <article class="job">
           <div class="job__meta">
-            <span class="job__date">Year — Year</span>
+            <span class="job__date">2023 — 2024</span>
           </div>
           <div class="job__body">
-            <h3 class="job__role">Your Role <span class="job__company">· Company Name</span></h3>
-            <p>Short description of what you did and the impact you had. Replace this with your
-              real experience.</p>
+            <h3 class="job__role">Software Developer, ML Platform <span class="job__company">· ODAIA Intelligence</span></h3>
+            <p>Optimized the Maptual platform for large client data using multiprocessing and AWS
+              Step Functions (Terraform), cutting task runtime by 50%. Built Maptual Labs, an
+              internal Streamlit QA tool that reduced debugging time by 80%, and a FastAPI layer to
+              replace direct S3/RDS access.</p>
+          </div>
+        </article>
+        <article class="job">
+          <div class="job__meta">
+            <span class="job__date">2021 — 2023</span>
+          </div>
+          <div class="job__body">
+            <h3 class="job__role">Software Developer <span class="job__company">· Cymax Group Technologies</span></h3>
+            <p>Built an AI-driven listing-error analyzer (React/Python) that saved $100K+ by
+              catching marketplace listing discrepancies, a computer-vision SKU-reversal app
+              deployed on Kubernetes, and an ML-based lead-time calculator that kept Amazon late
+              shipping under 4%.</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- ===== Projects ===== -->
+    <!-- ===== Selected Work (ODAIA) ===== -->
+    <section id="work" class="section reveal">
+      <h2 class="section__title"><span>03.</span> Selected Work</h2>
+      <p class="prose">Engineering I led at <strong>ODAIA</strong> — a pharma analytics platform. Swap the placeholder thumbnails for your own screenshots anytime.</p>
+      <div class="grid grid--work">
+        <article class="card card--work">
+          <div class="card__media"><img src="assets/work/snowflake-migration.svg" alt="RDS to Snowflake migration" loading="lazy" /></div>
+          <div class="card__body">
+            <h3 class="card__title">RDS → Snowflake Migration</h3>
+            <p class="card__desc">Migrated a pharma analytics platform to a multi-tenant Snowflake
+              architecture — database-per-client isolation with an idempotent stage → temp → MERGE
+              ingestion pipeline and one-line client onboarding.</p>
+            <ul class="card__metrics">
+              <li>1M rows: 30 min → 6 s</li>
+              <li>~$120K/yr saved</li>
+              <li>Onboarding: hours → one-line PR</li>
+            </ul>
+            <ul class="card__tags"><li>Snowflake</li><li>Python</li><li>AWS</li><li>SQLAlchemy</li><li>ETL</li></ul>
+          </div>
+        </article>
+
+        <article class="card card--work">
+          <div class="card__media"><img src="assets/work/beacon-reports.svg" alt="Beacon Reports BI platform" loading="lazy" /></div>
+          <div class="card__body">
+            <h3 class="card__title">Beacon Reports — JSON-Driven BI</h3>
+            <p class="card__desc">A declarative BI platform built to replace Sigma: dashboards are
+              JSON documents, rendered by a ~20-widget registry and authored straight from
+              natural-language prompts, with safe parameterized SQL against Snowflake.</p>
+            <ul class="card__metrics">
+              <li>20+ widget types</li>
+              <li>Prompt → validated dashboard JSON</li>
+            </ul>
+            <ul class="card__tags"><li>Next.js</li><li>React</li><li>FastAPI</li><li>Snowflake</li><li>LLM</li></ul>
+          </div>
+        </article>
+
+        <article class="card card--work">
+          <div class="card__media"><img src="assets/work/beacon-agent.svg" alt="Beacon Agent platform" loading="lazy" /></div>
+          <div class="card__body">
+            <h3 class="card__title">Beacon Agent Platform</h3>
+            <p class="card__desc">A distributed, horizontally-scalable AI agent connecting a chat UI
+              to Claude Code workers through a smart routing gateway — sticky routing, conversation
+              locks, SSE streaming, and an OpenAI-compatible API.</p>
+            <ul class="card__metrics">
+              <li>3-service architecture</li>
+              <li>Sticky routing + SSE streaming</li>
+            </ul>
+            <ul class="card__tags"><li>FastAPI</li><li>Claude Code</li><li>DynamoDB</li><li>AWS</li><li>SSE</li></ul>
+          </div>
+        </article>
+
+        <article class="card card--work">
+          <div class="card__media"><img src="assets/work/agent-rbac.svg" alt="Agent RBAC and deterministic skills" loading="lazy" /></div>
+          <div class="card__body">
+            <h3 class="card__title">Agent RBAC &amp; Deterministic Skills</h3>
+            <p class="card__desc">A security model where scope is a property of the environment, not
+              model behavior — RBAC injected by trusted infra and enforced at four independent
+              layers, making LLM-invoked skills both secure and deterministically testable.</p>
+            <ul class="card__metrics">
+              <li>4-layer defense in depth</li>
+              <li>Deterministic, testable skills</li>
+            </ul>
+            <ul class="card__tags"><li>Security</li><li>RBAC</li><li>Multi-tenant</li><li>Python</li></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Projects (personal) ===== -->
     <section id="projects" class="section reveal">
-      <h2 class="section__title"><span>03.</span> Projects</h2>
-      <div class="grid">
-        <a class="card" href="https://instagram.com/dusty_notes" target="_blank" rel="noopener">
-          <div class="card__top">
-            <span class="card__icon">📰</span>
-            <span class="card__link">↗</span>
+      <h2 class="section__title"><span>04.</span> Personal Projects</h2>
+      <div class="grid grid--work">
+        <a class="card card--work" href="https://www.instagram.com/dusty.notes_/" target="_blank" rel="noopener">
+          <div class="card__media"><img src="assets/work/dusty-notes.svg" alt="dusty.notes_" loading="lazy" /><span class="card__link">↗</span></div>
+          <div class="card__body">
+            <h3 class="card__title">dusty.notes_</h3>
+            <p class="card__desc">An AI-powered Instagram that auto-generates and posts news and ideas.</p>
+            <ul class="card__tags"><li>AI</li><li>Content</li><li>Automation</li></ul>
           </div>
-          <h3 class="card__title">dusty_notes</h3>
-          <p class="card__desc">An AI-powered Instagram that auto-generates and posts news and ideas.</p>
-          <ul class="card__tags"><li>AI</li><li>Content</li><li>Automation</li></ul>
         </a>
-        <a class="card" href="https://github.com/dustymemo" target="_blank" rel="noopener">
-          <div class="card__top">
-            <span class="card__icon">🤖</span>
-            <span class="card__link">↗</span>
+        <article class="card card--work">
+          <div class="card__media"><img src="assets/work/trading-agent.svg" alt="Trading Agent" loading="lazy" /></div>
+          <div class="card__body">
+            <h3 class="card__title">Trading Agent</h3>
+            <p class="card__desc">An autonomous agent that analyzes markets and executes strategies.</p>
+            <ul class="card__tags"><li>Python</li><li>Agents</li><li>Finance</li></ul>
           </div>
-          <h3 class="card__title">Trading Agent</h3>
-          <p class="card__desc">An autonomous agent that analyzes markets and executes strategies.</p>
-          <ul class="card__tags"><li>Python</li><li>Agents</li><li>Finance</li></ul>
-        </a>
-        <a class="card" href="https://github.com/dustymemo" target="_blank" rel="noopener">
-          <div class="card__top">
-            <span class="card__icon">🎬</span>
-            <span class="card__link">↗</span>
+        </article>
+        <article class="card card--work">
+          <div class="card__media"><img src="assets/work/media-agent.svg" alt="Media Agent" loading="lazy" /></div>
+          <div class="card__body">
+            <h3 class="card__title">Media Agent</h3>
+            <p class="card__desc">A pipeline that generates and publishes media content end-to-end.</p>
+            <ul class="card__tags"><li>AI</li><li>Media</li><li>Pipeline</li></ul>
           </div>
-          <h3 class="card__title">Media Agent</h3>
-          <p class="card__desc">A pipeline that generates and publishes media content end-to-end.</p>
-          <ul class="card__tags"><li>AI</li><li>Media</li><li>Pipeline</li></ul>
-        </a>
+        </article>
       </div>
     </section>
 
     <!-- ===== Connect ===== -->
     <section id="connect" class="section section--center reveal">
-      <h2 class="section__title section__title--center"><span>04.</span> Connect</h2>
+      <h2 class="section__title section__title--center"><span>05.</span> Connect</h2>
       <p class="prose prose--center">
         Want to work together or just say hi? Find me here.
       </p>
       <div class="socials">
-        <a class="social" href="https://www.linkedin.com/in/YOUR-HANDLE" target="_blank" rel="noopener">
+        <a class="social" href="https://www.linkedin.com/in/dustinlin718/" target="_blank" rel="noopener">
           <span class="social__icon">in</span> LinkedIn
+        </a>
+        <a class="social" href="https://www.instagram.com/dusty.notes_/" target="_blank" rel="noopener">
+          <span class="social__icon">ig</span> dusty_notes
         </a>
         <a class="social" href="https://github.com/dustymemo" target="_blank" rel="noopener">
           <span class="social__icon">gh</span> GitHub
         </a>
-        <a class="social" href="https://instagram.com/dusty_notes" target="_blank" rel="noopener">
-          <span class="social__icon">ig</span> dusty_notes
-        </a>
         <a class="social" href="mailto:dustinlin718@gmail.com">
           <span class="social__icon">@</span> Email
+        </a>
+        <a class="social" href="assets/Dustin-Lin-Resume.pdf" target="_blank" rel="noopener">
+          <span class="social__icon">cv</span> Résumé
         </a>
       </div>
     </section>
