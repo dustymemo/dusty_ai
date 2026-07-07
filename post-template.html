@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="theme.css" />
+  <script>document.documentElement.classList.add('anim')</script>
   <style>
     /* This block is identical across every post — copy it as-is.
        Colors + fonts come from theme.css, so you never touch them here. */
@@ -63,12 +64,21 @@
       font-family:var(--mono);font-size:.8rem;}
     .endnav a:hover{color:var(--highlight);}
     footer{text-align:center;padding:40px 20px 60px;color:var(--graphite);font-family:var(--mono);font-size:.8rem;border-top:1px solid var(--border);}
+    /* scroll reveal */
+    @media(prefers-reduced-motion:no-preference){
+      .anim .stitle,.anim .prose,.anim .job,.anim .skillrow,.anim .card,.anim .pcard,.anim .socials,.anim .chat,.anim .demo,.anim .slot,
+      .anim .hero__eyebrow,.anim .hero h1,.anim .hero__sub,.anim .hero__cta,.anim .hero__avatar,
+      .anim .phead .eyebrow,.anim .phead h1,.anim .phead .lead,
+      .anim .ahead .back,.anim .ahead .ahead__meta,.anim .ahead h1,.anim .ahead .lead,.anim .body>*{opacity:0;}
+      .anim .in{animation:reveal-rise .6s cubic-bezier(.22,.61,.36,1) both;}
+    }
+    @keyframes reveal-rise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important;}}
   </style>
 </head>
 <body>
   <header class="nav">
-    <a href="index.html" class="brand">dusty<b>_ai</b></a>
+    <a href="index.html" class="brand">Dustin Lin <span class="brand__h">· dusty<b>_ai</b></span></a>
     <button class="nav__menu" aria-label="Menu" aria-expanded="false">☰</button>
     <nav class="links">
       <a href="index.html#experience">Experience</a>
@@ -114,5 +124,6 @@
 
   <footer>© 2026 Your Name</footer>
   <script src="nav.js"></script>
+  <script src="reveal.js"></script>
 </body>
 </html>

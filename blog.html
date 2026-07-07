@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" />
   <link rel="stylesheet" href="theme.css" />
+  <script>document.documentElement.classList.add('anim')</script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
@@ -61,7 +62,7 @@
     @media(max-width:760px){.grid{grid-template-columns:1fr;}}
     .pcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 24px;
       box-shadow:2px 4px 0 rgba(43,57,91,.05);transition:transform .18s,box-shadow .2s;}
-    .pcard:hover{transform:translateY(-4px);box-shadow:5px 9px 0 rgba(43,57,91,.09);}
+    .pcard:hover{transform:translateY(-4px)!important;box-shadow:5px 9px 0 rgba(43,57,91,.09);}
     .pcard__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
     .pcard__cat{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);
       background:rgba(242,189,30,.28);border:1px solid rgba(242,189,30,.5);border-radius:100px;padding:3px 10px;}
@@ -101,12 +102,24 @@
 
     footer{text-align:center;padding:40px 20px 60px;color:var(--graphite);font-family:var(--mono);font-size:.8rem;border-top:1px solid var(--border);}
     footer a{text-decoration:underline;text-decoration-color:var(--highlight);text-underline-offset:2px;}
+    /* scroll reveal */
+    @media(prefers-reduced-motion:no-preference){
+      .anim .stitle,.anim .prose,.anim .job,.anim .skillrow,.anim .card,.anim .pcard,.anim .socials,.anim .chat,.anim .demo,.anim .slot,
+      .anim .hero__eyebrow,.anim .hero h1,.anim .hero__sub,.anim .hero__cta,.anim .hero__avatar,
+      .anim .phead .eyebrow,.anim .phead h1,.anim .phead .lead,
+      .anim .ahead .back,.anim .ahead .ahead__meta,.anim .ahead h1,.anim .ahead .lead,.anim .body>*{opacity:0;}
+      .anim .in{animation:reveal-rise .6s cubic-bezier(.22,.61,.36,1) both;}
+      .anim .grid .card:nth-child(2),.anim .grid .pcard:nth-child(2){animation-delay:.08s;}
+      .anim .grid .card:nth-child(3),.anim .grid .pcard:nth-child(3){animation-delay:.16s;}
+      .anim .grid .card:nth-child(4),.anim .grid .pcard:nth-child(4){animation-delay:.24s;}
+    }
+    @keyframes reveal-rise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important;}}
   </style>
 </head>
 <body>
   <header class="nav">
-    <a href="index.html" class="brand">dusty<b>_ai</b></a>
+    <a href="index.html" class="brand">Dustin Lin <span class="brand__h">· dusty<b>_ai</b></span></a>
     <button class="nav__menu" aria-label="Menu" aria-expanded="false">☰</button>
     <nav class="links">
       <a href="index.html#experience">Experience</a>
@@ -231,5 +244,6 @@
   })();
   </script>
   <script src="nav.js"></script>
+  <script src="reveal.js"></script>
 </body>
 </html>

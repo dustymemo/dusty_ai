@@ -35,3 +35,7 @@
   /* ---- Layout ---- */
   --max:960px;          /* max content width      */
 }
+
+/* nav brand: your name + handle */
+.brand__h{color:var(--graphite);font-weight:400;font-size:.84em;margin-left:3px;}
+@media(max-width:430px){.brand__h{display:none;}}
