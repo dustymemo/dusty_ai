@@ -31,8 +31,9 @@ the template, host it free, and use an AI assistant to fill in your details.
 reference: rebrand in `theme.css`, edit content in `index.html`, add posts, deploy.
 
 **Want an AI to do the editing?** → **[PROMPT.md](PROMPT.md)** has ready-made,
-fill-in-the-blank prompts — paste your files into ChatGPT/Claude and it hands back
-a finished, personalized site.
+fill-in-the-blank prompts. Point an AI coding agent like **Claude Code** at the repo
+to edit everything at once, or paste files into ChatGPT/Claude one at a time — either
+way it hands back a finished, personalized site.
 
 ### The short version
 

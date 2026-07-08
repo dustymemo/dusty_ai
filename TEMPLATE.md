@@ -49,6 +49,24 @@ Edit these in the `<head>` and hero:
 The nav logo text and résumé filename are repeated in `blog.html` and the
 `blog-*.html` posts — search-and-replace across files.
 
+### Images, avatar & résumé — the `assets/` folder
+
+All media lives in `assets/`. Two ways to swap in yours:
+
+- **Keep the filenames (zero code changes):** upload your files with the *same
+  names* as the originals and everything just works.
+  - **Avatar:** `assets/profile.png`
+  - **Résumé:** `assets/Dustin-Lin-Resume.pdf`
+  - **Work / project card images:** `assets/work/*.jpg` — e.g.
+    `snowflake-migration.jpg`, `dusty-notes.jpg`. Each card's `<img src="…">` in
+    `index.html` points to one of these.
+- **Use your own filenames:** upload with any name, then update the matching
+  `src="assets/…"` and résumé `href="assets/…"` paths in `index.html` (and
+  `blog*.html`). No image for a card? Delete its `<img>` or use a placeholder
+  from unsplash.com.
+
+Keep images reasonably small (JPGs ~1600px wide) so the site stays fast.
+
 ## 3. Content — `index.html`
 
 - **Work Experience** → the `#experience` timeline (`.job` blocks).
@@ -59,9 +77,13 @@ The nav logo text and résumé filename are repeated in `blog.html` and the
 
 ## 4. Links & socials
 
-- **Connect section** (`#connect` in `index.html`) — LinkedIn, GitHub, email, etc.
+Update your handles in **two** places so they stay consistent:
+
+- **Connect section** (`#connect` in `index.html`) — LinkedIn, GitHub, Instagram,
+  email, résumé. These are the `<a href="…">` social buttons.
 - **The "Ask me" agent** — its knowledge base is a `KB` array in the `<script>` at
-  the bottom of `index.html`. Edit the answers + the `chips` starter prompts.
+  the bottom of `index.html`. The contact answer repeats your email/LinkedIn/GitHub,
+  so update it there too. Also edit the `chips` starter prompts.
   It's a **local, scripted agent** (no API key). To wire a real model, replace the
   `answer()` function with a `fetch()` to your own endpoint.
 
@@ -99,5 +121,6 @@ command, publish directory is the repo root.
 | `blog.html` | Blog index (post cards) + Playground |
 | `blog-*.html` | Individual blog posts |
 | `post-template.html` | Blank post to copy for new entries |
-| `assets/` | Profile photo, résumé, project images |
-| `architecture.html` | Standalone copy of the home design (optional) |
+| `nav.js` / `reveal.js` | Mobile menu + scroll animations (no need to edit) |
+| `assets/` | Avatar (`profile.png`), résumé PDF, card images (`work/*.jpg`) |
+| `START-HERE.md` / `PROMPT.md` | Beginner guide + copy-paste AI prompts |

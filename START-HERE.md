@@ -97,13 +97,28 @@ Change `--highlight` first — it's the main accent color and has the biggest ef
 
 ---
 
-## Step 6 — Add your photo and résumé
+## Step 6 — Add your photo, images, résumé & social links
 
-1. Click the **`assets`** folder in your repository.
-2. To replace the profile photo: click **Add file → Upload files**, upload your
-   photo, and **name it exactly `profile.png`** (same name as the old one).
-3. Do the same for your résumé PDF (match the existing file name, or ask the AI
-   to update the link in `index.html` to your new file name).
+All your pictures and files live in the **`assets`** folder. Click it, then
+**Add file → Upload files** to add yours.
+
+- **Profile photo (the round avatar):** upload your photo and **name it exactly
+  `profile.png`**.
+- **Project / work card images** (the pictures on the cards): these live in
+  **`assets/work`**. Upload yours there. Easiest is to give them the **same names**
+  as the ones already inside (like `snowflake-migration.jpg`) so nothing else needs
+  changing — or upload with your own names and ask the AI to update the picture
+  links in `index.html`. No images handy? Ask the AI to remove the pictures from
+  the cards, or grab free ones from **unsplash.com**.
+- **Résumé:** upload your PDF and match the old file name, or ask the AI to point
+  the "Résumé" links to your file name.
+- **Social links** (LinkedIn, GitHub, Instagram, email): these are in the
+  **Connect** part of `index.html`. If you gave them to the AI back in Step 4,
+  they're already updated — otherwise open `index.html`, click the pencil ✏️, and
+  search for the old link to replace it.
+
+> Anything you upload to a public repo is publicly downloadable — which is fine
+> for a résumé you *want* people to see, just good to know.
 
 ---
 

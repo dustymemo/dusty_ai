@@ -12,8 +12,55 @@ Don't want to edit code yourself? Let a free AI assistant do it.
    old text in the editor, paste the new version, and click **Commit changes**.
 5. Refresh your live site in a minute — it's yours. 🎉
 
-> Repeat the same trick with **`theme.css`** (for colors) using the shorter prompt
-> at the bottom. Your **photo and résumé** you upload yourself — an AI can't do that.
+> Repeat the trick with **`theme.css`** (colors) using the shorter prompt below.
+> Your **photo, project images, and résumé** you upload to the `assets` folder
+> yourself — an AI can't upload files. If your files use different names, the
+> Prompt 1 blanks let you tell the AI so it updates the links for you.
+
+---
+
+## 🧑‍💻 Easiest option: use an AI coding agent (Claude Code, Cursor, etc.)
+
+If you can run **[Claude Code](https://claude.com/claude-code)** (or Cursor, or a
+similar AI that works *inside* your project), this is the simplest path by far — it
+edits **all** the files for you at once, so there's no copy-pasting single files.
+
+Open this repo in the tool, then paste the prompt below with your details filled in:
+
+```text
+You are helping me turn this repository (a personal-website template) into MY own
+personal site. Please make all the edits directly across the files.
+
+MY INFO:
+- Full name: [ ]
+- Headline (what I do): [ ]
+- Short intro (1–2 sentences, my voice): [ ]
+- Work experience (company, role, dates, 2–3 achievements each): [ ]
+- Selected work / main projects (name, description, impact, tools): [ ]
+- Personal / side projects (name, one line, status): [ ]
+- Skills, grouped: [ ]
+- Email / LinkedIn / GitHub / Instagram: [ ]
+- Brand colors or vibe I want (optional): [ ]
+
+PLEASE:
+1. Update index.html — my name, the brand, hero, experience, selected work,
+   projects, skills, Connect links, and the "Ask me" agent's KB answers + chips.
+2. Update theme.css if I gave you colors or a vibe.
+3. I will add my own files to assets/ (profile.png, my résumé PDF, and card images
+   in assets/work/). Update the matching image/résumé links if my file names differ.
+4. Match the <title>, meta description, brand text, and résumé links in blog.html
+   and the blog-*.html posts.
+5. Keep the layout, structure, scripts, and CSS working. Write the copy concisely
+   and concretely — no clichés like "passionate about" or "results-driven."
+6. When done, tell me exactly which files to put in assets/, and how to turn on
+   GitHub Pages so my site goes live.
+```
+
+Then just keep chatting with it: *"make the accent color green," "add a blog post
+about X," "remove the trading-agent project,"* and so on.
+
+> The prompts below (copy-paste into ChatGPT/Claude/Gemini web) are for when you
+> **don't** have a coding agent — they do the same thing, one file at a time.
 
 ---
 
@@ -27,6 +74,8 @@ site is about ME, and return the COMPLETE updated file, ready to paste back.
 RULES:
 - Keep every HTML tag, class, structure, <script>, and link working. Do NOT
   remove sections, and do NOT change the layout or CSS.
+- If I list new image or résumé file names below, update the matching
+  src="assets/..." and href="assets/..." paths to use them.
 - Replace the name, headline, intro, work experience, selected work, personal
   projects, skills, and contact/social links with my info below.
 - Also update the "Ask me" chat agent: near the bottom there is a `KB` array and
@@ -55,8 +104,10 @@ HERE IS MY INFO:
   [ ]
 - Email: [ ]
 - LinkedIn: [ ]
-- GitHub or other links: [ ]
+- GitHub: [ ]
+- Instagram / other social links: [ ]
 - Résumé file name if you renamed it (else leave as is): [ ]
+- Project/card image file names I uploaded, if different from the template's: [ ]
 
 HERE IS index.html:
 [PASTE THE ENTIRE CONTENTS OF index.html HERE]
